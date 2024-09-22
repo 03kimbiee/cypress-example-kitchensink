@@ -1,4 +1,12 @@
 module.exports = {
-  'projectId': '4b7344',
-  e2e: {},
-}
+  e2e: {
+    chromeWebSecurity: false, // Desactiva la política de seguridad web de Chrome
+  },
+
+  component: {
+    devServer: {
+      framework: "next",
+      bundler: "webpack",
+    },
+  },
+};
