@@ -1,61 +1,85 @@
 describe('PokeAPI Tests', () => {
-    const baseUrl = 'https://pokeapi.co/api/v2/berry';
-  
-    it('should get a berry by valid id', () => {
-      cy.request(`${baseUrl}/1`)
-        .its('status')
-        .should('equal', 200);
-  
-      cy.request(`${baseUrl}/1`).then((response) => {
-        expect(response.body.name).to.exist; // Asegúrate de que el cuerpo tiene un nombre
-      });
-    });
-  
-    it('should return an error for invalid id', () => {
-      cy.request({
-        url: `${baseUrl}/99999`, // ID que no existe
-        failOnStatusCode: false, // No fallar en el código de estado
-      }).its('status')
-        .should('equal', 404);
-    });
-  
-    it('should get a berry by valid name', () => {
-      cy.request(`${baseUrl}/cheri`)
-        .its('status')
-        .should('equal', 200);
-  
-      cy.request(`${baseUrl}/cheri`).then((response) => {
-        expect(response.body.name).to.equal('cheri'); // Verifica que el nombre sea correcto
-      });
-    });
-  
-    it('should return an error for invalid name', () => {
-      cy.request({
-        url: `${baseUrl}/invalidname`, // Nombre que no existe
-        failOnStatusCode: false, // No fallar en el código de estado
-      }).its('status')
-        .should('equal', 404);
-    });
-  
-    it('should get berry flavor by valid name', () => {
-      cy.request('https://pokeapi.co/api/v2/berry-flavor/spicy')
-        .its('status')
-        .should('equal', 200);
-    });
-  
-    it('should find the berry with the highest potency in spicy flavor', () => {
-      cy.request('https://pokeapi.co/api/v2/berry-flavor/spicy').then((response) => {
-        const berries = response.body.berries;
-  
-        // Encuentra la berry con mayor potencia
-        const berryWithHighestPotency = berries.reduce((prev, curr) => {
-          return (prev.potency > curr.potency) ? prev : curr;
-        });
-  
-        // Llamar a la API con la berry encontrada
-        return cy.request(`${baseUrl}/${berryWithHighestPotency.berry.name}`)
-          .its('status')
-          .should('equal', 200);
-      });
+// Each of the URLs was tested and verified using Postman.
+  const berryUrl = 'https://pokeapi.co/api/v2/berry';
+  const berryFlavorUrl = 'https://pokeapi.co/api/v2/berry-flavor';
+
+  //Make sure we can call https://pokeapi.co/api/v2/berry/{id or name}/ using a valid id, 
+  //and we get expected response
+  it('Should return a valid response for a valid berry ID', () => {
+    cy.request({
+      method: 'GET',
+      url: `${berryUrl}/1/`,
+    }).then(response => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property('name');
     });
   });
+  
+  //Check error is appearing when calling with invalid id
+  it('Should return an error for an invalid berry ID', () => {
+    cy.request({
+      method: 'GET',
+      url: `${berryUrl}/99999`, 
+      failOnStatusCode: false,
+    }).then(response => {
+      expect(response.status).to.eq(404);
+    });
+  });
+  
+  //Make sure we can call https://pokeapi.co/api/v2/berry/{id or name}/ 
+  //using a valid name, and we get expected response
+  it('Should return a valid response for a valid berry name', () => {
+    cy.request({
+      method: 'GET',
+      url: `${berryUrl}/cheri`,
+    }).then(response => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property('name');
+      expect(response.body.name).to.equal('cheri');
+    })
+  });
+  
+  //- Check error is appearing when calling with invalid name
+  it('Should return an error for an invalid berry name', () => {
+    cy.request({
+      method: 'GET',
+      url: `${berryUrl}/invalidname`, 
+      failOnStatusCode: false,
+    }).then(response => {
+      expect(response.status).to.eq(404);
+    });
+  });
+
+  //Make sure we can call https://pokeapi.co/api/v2/berry-flavor/{id or name}/ using a valid name, 
+  //and we get the expected response.
+  it('Should return a valid response for a valid berry flavor name', () => {
+    cy.request({
+      method: 'GET',
+      url: `${berryFlavorUrl}/spicy`,
+    }).then(response => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property('name');
+    })
+  });
+  
+  // Then, pick up all the berries with “spicy” flavour, check the name of the one with more 
+  // “potency”, and call https://pokeapi.co/api/v2/berry/{id or name}/ using that info, making 
+  // sure we get the expected responses.
+  it('Should return the berry with the highest potency for the spicy flavor', () => {
+    cy.request({
+      method: 'GET',
+      url: `${berryFlavorUrl}/spicy`,
+    }).then((response) => {
+      const berries = response.body.berries;
+      const spicyBerries = berries.filter(berry => berry.potency > 0);
+      const berryWithHighestPotency = spicyBerries.reduce((max, current) => {
+        return max.potency > current.potency ? max : current;
+      }, spicyBerries[0]);
+
+    cy.request(`${berryUrl}/${berryWithHighestPotency.berry.name}/`).then(response =>{
+        expect(response.status).to.eq(200);
+        expect(response.body).to.have.property('name');
+      })
+    });
+  });
+});

@@ -1,0 +1,43 @@
+3. Implement the following manual test:
+- Given the following form:
+    <label for="tentacles">Number of tentacles (10-100):</label>
+    <input type="number" id="tentacles" name="tentacles"
+    min="10" max="100"> 
+    <button>Send</button>
+Write all necessary test cases to make sure the input field is working as expected; valid values will lead 
+to a "Success" message, and invalid to an "Error" message.
+
+Gherkin:
+
+    Scenario: Validate input for Number of tentacles and display a Success or Error message
+        Given a page with an input field for "Number of tentacles"
+
+        # Valid value test
+        When enter a 'valid value' (between 10 and 100) in "Number of tentacles" input field
+        And click on 'Send' button 
+        Then the page should display 'Success' message
+
+        # Invalid value test
+        When enter a 'invalid value' (less than 10 or greater than 100) in "Number of tentacles" input field
+        And click on 'Send' button 
+        Then the page should display 'Error' message
+
+    
+    Examples: 
+        | input     | message   |
+        | 10        | Success   |
+        | 20        | Success   |
+        | 53        | Success   |
+        | 88        | Success   |
+        | 100       | Success   |
+        | 101       | Error     |
+        | 9         | Error     |
+        | 0         | Error     |
+        | -10       | Error     |
+        | ""        | Error     |
+        | @#$∞      | Error     |
+        | 100.001   | Error     |
+        | 9.999     | Error     |
+        | abc       | Error     |
+
+

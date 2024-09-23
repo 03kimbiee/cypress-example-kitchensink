@@ -1,0 +1,22 @@
+4. Write the following bug report:
+While performing the 2nd test on point 1 (Top Box Office test) you found each time you try to rate 
+a movie with 10 stars, the Rate button is not enabled, so you cannot submit the data. Write a bug 
+to report this issue.
+
+Bug at Top Box office page while click on 'Rate' button in the modal 
+
+Steps to reproduce: 
+1. Go to 'Top Box Office' section through the 'Movies' section on the Menu
+2. Select the 2nd movie in the list
+3. Click on IMDb Rating button
+4. Click on Rate button
+5. Set 10 starts Rating 
+6. Click on Rate button in the modal
+
+Expected result: The Rate button should be enabled and the rating should be submitted successfully
+
+Actual result: On step 6, each time a movie is rated with 10 stars, the Rate button remains disabled,
+preventing the user from submitting their rating.
+
+Additional Information:
+- Screenshots or videos (if available) would provide further context for this issue.

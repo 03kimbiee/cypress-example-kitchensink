@@ -66,7 +66,7 @@ describe('IMDB.com page test', () => {
     // Go to IMDb.com, unfold the Menu button and navigate to the Born today section; delete default search, 
     // then unfold Birthday and search for Celebrities born yesterday. Click on the 3rd name in the 
     // list and take a screenshot.
-    it.only('Born today section tests', () => {
+    it('Born today section tests', () => {
         home.clickPreferencesAcceptButton();
         home.clickMenuButton();
         //home.clickItemTitle('Celebs');

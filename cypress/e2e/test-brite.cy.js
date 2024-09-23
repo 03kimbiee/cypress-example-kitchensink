@@ -15,7 +15,7 @@ describe('IMDB.com page test', () => {
     // Go to IMDb.com, search for Nicolas Cage and access his profile; then unfold the Upcoming tab in the Credits section, 
     // and click on the first movie with a Completed tag. We want to make sure that this scenario is working on Chrome and Firefox.
     it('Nicolas Cage Profile Test', () => {
-        //cy.visit('https://www.imdb.com');
+        cy.get('[data-testid="accept-button"]').click();
         cy.get('input[name="q"]').type('Nicolas Cage{enter}');
         cy.contains('Nicolas Cage').click();
         cy.contains('Upcoming').first().click();
@@ -42,13 +42,10 @@ describe('IMDB.com page test', () => {
     // Top box office list; then click on the IMDb Rating button, click on the Rate button, and set a 5 stars Rating and 
     // click on the Rate button in the modal
     it('Top Box Office section test', () => {
-        //cy.visit('https://www.imdb.com');
-        cy.wait(2000);
-        const selectYourPreferences = cy.get('[data-testid="accept-button"]');
-        selectYourPreferences.click();
+        cy.get('[data-testid="accept-button"]').click();
         cy.get('#imdbHeader-navDrawerOpen').click();
         //cy.get('.navlinkcat__itemTitle').contains('Movies').click()
-        cy.contains('Top Box Office').click();
+        cy.contains(' BoxTop Office').click();
         cy.get('.ipc-metadata-list-summary-item.sc-10233bc-0.TwzGn.cli-parent').eq(1).children().first().click();
         cy.get('.sc-eb51e184-0.ghvwpw').first().click();
         cy.get('.ipc-btn__text').contains('Rate').click();
@@ -61,10 +58,7 @@ describe('IMDB.com page test', () => {
     // Go to IMDb.com, unfold the Menu button, and navigate to the Top 250 TV Shows section; then click on Breaking Bad, 
     // go to the Photos, display only Danny Trejo's photos, and then click on the 2nd photo in the list.
     it('Top 250 TV Shows section test', () => {
-        //cy.visit('https://www.imdb.com');
-        cy.wait(2000);
-        const selectYourPreferences = cy.get('[data-testid="accept-button"]');
-        selectYourPreferences.click();
+        cy.get('[data-testid="accept-button"]').click();
         cy.get('#imdbHeader-navDrawerOpen').click();
         //cy.get('.navlinkcat__itemTitle').contains('TV Shows').click()
         cy.contains('Top 250 TV Shows').click();
@@ -77,10 +71,7 @@ describe('IMDB.com page test', () => {
     // Go to IMDb.com, unfold the Menu button and navigate to the Born today section; delete default search, then unfold Birthday 
     // and search for Celebrities born yesterday. Click on the 3rd name in the list and take a screenshot.
     it('Born today section tests', () => {
-        //cy.visit('https://www.imdb.com');
-        cy.wait(2000);
-        const selectYourPreferences = cy.get('[data-testid="accept-button"]');
-        selectYourPreferences.click();
+        cy.get('[data-testid="accept-button"]').click();
         cy.get('#imdbHeader-navDrawerOpen').click();
         //cy.get('.navlinkcat__itemTitle').contains('Celebs').click();
         cy.contains('Born Today').click();
@@ -123,10 +114,7 @@ describe('IMDB.com page test', () => {
         }
         const date40YearsAgo = getDate40YearsAgo();
 
-        //cy.visit('https://www.imdb.com');
-        cy.wait(2000);
-        const selectYourPreferences = cy.get('[data-testid="accept-button"]');
-        selectYourPreferences.click();
+        cy.get('[data-testid="accept-button"]').click();
         cy.get('#imdbHeader-navDrawerOpen').click();
         //cy.get('.navlinkcat__itemTitle').contains('Celebs').click();
         cy.contains('Born Today').click();
