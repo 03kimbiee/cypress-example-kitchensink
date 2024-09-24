@@ -2,6 +2,7 @@ import ImbsHomePage from '../support/imdbPage';
 import ActorPage from '../support/actorPage';
 import TopBoxOfficePage from '../support/topBoxOfficePage';
 import BornTodayPage from '../support/bornTodayPage';
+import Top250tvShows from '../support/top250TVshowsPage'
 
 describe('IMDB.com page test', () => {
     Cypress.on('uncaught:exception', (err, runnable) => {
@@ -17,6 +18,7 @@ describe('IMDB.com page test', () => {
     const actorPage = new ActorPage();
     const topBoxOfficePage = new TopBoxOfficePage();
     const bornTodayPage = new BornTodayPage();
+    const top250tvShows = new Top250tvShows();
 
     beforeEach(() => {
         cy.viewport(1280, 720);
@@ -57,10 +59,16 @@ describe('IMDB.com page test', () => {
         home.clickMenuButton();
         //home.clickItemTitle('TV Shows');
         home.clickMenuItem('Top 250 TV Shows');
-        cy.contains('Breaking Bad').click('center', { force: true });
+        top250tvShows.clickOnMovieNameBox('Breaking Bad')
         cy.wait(2000);
-        cy.get('.ipc-title__text').contains('Photos').click();
-        //falta
+        top250tvShows.clickOnPhotosTitleBox('Photos');
+        top250tvShows.clickGalleryButton();
+        top250tvShows.clickFilterButton();
+        cy.wait(1000)
+        top250tvShows.selectMorePeopleDropdown();
+        top250tvShows.selectActorOnDropdown('Danny Trejo');
+        top250tvShows.clickCloseButton();
+        top250tvShows.clickSecondPhoto();
     })
 
     // Go to IMDb.com, unfold the Menu button and navigate to the Born today section; delete default search, 

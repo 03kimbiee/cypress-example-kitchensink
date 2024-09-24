@@ -45,9 +45,9 @@ describe('IMDB.com page test', () => {
         cy.get('[data-testid="accept-button"]').click();
         cy.get('#imdbHeader-navDrawerOpen').click();
         //cy.get('.navlinkcat__itemTitle').contains('Movies').click()
-        cy.contains(' BoxTop Office').click();
+        cy.contains('Top Box Office').click();
         cy.get('.ipc-metadata-list-summary-item.sc-10233bc-0.TwzGn.cli-parent').eq(1).children().first().click();
-        cy.get('.sc-eb51e184-0.ghvwpw').first().click();
+        cy.get('[data-testid="hero-rating-bar__aggregate-rating__score"]').first().click();
         cy.get('.ipc-btn__text').contains('Rate').click();
         cy.wait(1000);
         cy.get('button.ipc-starbar__rating__button[aria-label="Rate 5"]').click({ force: true });
@@ -65,7 +65,14 @@ describe('IMDB.com page test', () => {
         cy.contains('Breaking Bad').click('center', { force: true });
         cy.wait(2000);
         cy.get('.ipc-title__text').contains('Photos').click();
-        //falla
+        cy.get('[data-testid="mv-gallery-button"]').click();
+        cy.get('.ipc-chip-dropdown').click();
+        cy.wait(1000)
+        cy.get('label[for="Person-filter-select-dropdown"]').click({ force: true })
+        cy.get('#Person-filter-select-dropdown').select('nm0001803', { force: true })
+        cy.get('.ipc-chip-list__scroller').eq(1).should('contain', 'Danny Trejo');
+        cy.get('[data-testid="promptable__x"] > .ipc-icon-button').click();
+        cy.get('[data-testid="rm123229952-img-1"]').click();
     })
 
     // Go to IMDb.com, unfold the Menu button and navigate to the Born today section; delete default search, then unfold Birthday 
