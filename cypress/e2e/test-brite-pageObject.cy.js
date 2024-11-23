@@ -21,9 +21,10 @@ describe('IMDB.com page test', () => {
     const top250tvShows = new Top250tvShows();
 
     beforeEach(() => {
+        cy.intercept('GET', 'https://caching.graphql.imdb.com/?operationName=NavBarFlyoutCTA&variables=%7B%22isLoggedIn%22%3Afalse%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%222a375844cd5537a920b43e49cdc95896542dc46aa8429e66b407bbe8a749b9c0%22%2C%22version%22%3A1%7D%7D').as('getCookies');
         cy.viewport(1280, 720);
         cy.visit('https://www.imdb.com');
-        cy.wait(1000);
+        cy.wait('@getCookies');
     })
 
     // Go to IMDb.com, search for Nicolas Cage and access his profile; then unfold the Upcoming tab in the Credits section, 
@@ -40,6 +41,7 @@ describe('IMDB.com page test', () => {
     // Top box office list; then click on the IMDb Rating button, click on the Rate button, and set a 5 stars Rating and 
     // click on the Rate button in the modal
     it('Top Box Office section test', () => {
+        cy.intercept('GET', 'https://api.graphql.imdb.com/?operationName=RVI_Items&variables=%7B%22count%22%3A15%2C%22locale%22%3A%22en-US%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%2232eda43bfa1053f69036b945638fc4a0ae6cc4a2429de224b3185f8b0e37717b%22%2C%22version%22%3A1%7D%7D').as('getRatingDialog')
         home.clickPreferencesAcceptButton();
         home.clickMenuButton();
         //home.clickItemTitle('Movies');
@@ -47,7 +49,7 @@ describe('IMDB.com page test', () => {
         topBoxOfficePage.clickOnTheSecondItem();
         topBoxOfficePage.clickIMDbRatingButton();
         topBoxOfficePage.clickRatingButton();
-        cy.wait(1000);
+        cy.wait('@getRatingDialog');
         topBoxOfficePage.click5StarsButton();
         topBoxOfficePage.clickRateButton();
     })
@@ -60,11 +62,9 @@ describe('IMDB.com page test', () => {
         //home.clickItemTitle('TV Shows');
         home.clickMenuItem('Top 250 TV Shows');
         top250tvShows.clickOnMovieNameBox('Breaking Bad')
-        cy.wait(2000);
         top250tvShows.clickOnPhotosTitleBox('Photos');
         top250tvShows.clickGalleryButton();
         top250tvShows.clickFilterButton();
-        cy.wait(1000)
         top250tvShows.selectMorePeopleDropdown();
         top250tvShows.selectActorOnDropdown('Danny Trejo');
         top250tvShows.clickCloseButton();
@@ -79,7 +79,6 @@ describe('IMDB.com page test', () => {
         home.clickMenuButton();
         //home.clickItemTitle('Celebs');
         home.clickMenuItem('Born Today');
-        cy.wait(1000);
         bornTodayPage.clickFilterName('Birthday');
         bornTodayPage.searchActorBornYesterday();
         bornTodayPage.clickThirdName();

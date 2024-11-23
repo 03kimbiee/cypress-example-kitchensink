@@ -8,7 +8,7 @@ class Top250tvShows{
         personFilterDropdown: () => cy.get('#Person-filter-select-dropdown'),
         actorNameSelector: () => cy.get('.ipc-chip-list__scroller'),
         closeButton: () => cy.get('[data-testid="promptable__x"] > .ipc-icon-button'),
-        secondPhotoField: () => cy.get('[data-testid="rm123229952-img-1"]')
+        secondPhotoField: () => cy.get('[data-testid="rm422650113-img-1"]')
     };
 
     clickOnMovieNameBox(movieName) {
